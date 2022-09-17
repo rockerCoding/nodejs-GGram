@@ -26,6 +26,11 @@ module.exports = app => {
     Usuarios.buscaNomeUsuario(id, res);
   })
 
-  
+  app.get("/usuarios/amigos/:id", (req, res) => {
+    const id = req.params.id
+    Usuarios.buscaAmigos(id, res)
+  })
+
+
 
 }

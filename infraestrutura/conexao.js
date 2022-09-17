@@ -6,6 +6,7 @@ const conexao = mysql.createConnection({
   user: 'root',
   password: 'root',
   database: 'guigram',
+  multipleStatements: true
 })
 
 module.exports = conexao

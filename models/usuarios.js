@@ -1,23 +1,13 @@
-const moment = require('moment')
+const moment = require('moment');
 const conexao = require('../infraestrutura/conexao')
 
 class Usuario {
 
-  logar(user, res) {
-    const sql = "select nome, descricao, foto from usuarios where nome = ? and password = ?";
-    conexao.query(sql, [user.login, user.pass], (error, results) => {
-      if(error) res.status(500).send("{'message':'Erro no servidor. Tente novamente mais tarde'}")
-      else {
-        if(results.length > 0){
-          res.status(200).json(results[0])
-        } else {
-          const erro = {
-            "message" : "Usuário ou senha incorreta. Tente novamente"
-          }
-          res.json(erro)
-        }
-      }
-    })    
+  constructor(id, nome, foto, descricao) {
+    this.id = id,
+    this.nome = nome,
+    this.foto = foto, 
+    this.descricao = descricao
   }
 
   criarUsuario(usuario, res) {
@@ -48,7 +38,7 @@ class Usuario {
   }
 
   buscarUsuario(id, res) {
-    const sql = `SELECT * FROM usuarios WHERE idusuarios = ${id}`;
+    const sql = `SELECT nome, descricao, foto, ultimaLocalizacao FROM usuarios WHERE idusuarios = ${id}`;
 
     conexao.query(sql, (error, results) => {
       const usuario = results && results[0];
@@ -66,6 +56,16 @@ class Usuario {
     conexao.query(sql, (error, results) => {
       if(error) console.log(error)
       else res.send(results[0])
+    })
+  }
+
+  buscaAmigos(id, res) {
+    console.log(id)
+    const sql = `select * from usuarios_has_amigos where idusuario = ? or idamigo = ?`
+    
+    conexao.query(sql,[id, id], (error, results) => {
+      if(error) console.log(error)
+      else res.status(200).send(results)
     })
   }
 
